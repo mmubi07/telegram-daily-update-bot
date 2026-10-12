@@ -1,0 +1,165 @@
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #182235;
+  background: #f3f6fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.wrap {
+  max-width: 850px;
+  margin: 36px auto;
+  padding: 0 18px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  background: #229ed9;
+  color: #ffffff;
+  border-radius: 16px;
+  font-size: 28px;
+}
+
+h1 {
+  font-size: clamp(23px, 4vw, 32px);
+  margin: 0 0 6px;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+p {
+  margin: 4px 0 10px;
+  color: #68758b;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e1e7f0;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.03);
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.status p {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-weight: 650;
+  font-size: 14px;
+  margin: 17px 0 7px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid #d7deea;
+  border-radius: 10px;
+  font: inherit;
+  color: #182235;
+  background: #fbfcff;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid #b8e2f8;
+  border-color: #229ed9;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  background: #229ed9;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+button:hover {
+  filter: brightness(0.96);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.secondary {
+  background: #eaf4fb;
+  color: #16618a;
+}
+
+.muted {
+  font-size: 13px;
+}
+
+.error {
+  color: #c43d3d !important;
+  max-width: 600px;
+}
+
+footer {
+  text-align: center;
+  color: #7b8798;
+  font-size: 13px;
+  padding: 8px 0 28px;
+}
+
+@media (max-width: 560px) {
+  .wrap {
+    margin: 22px auto;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .status {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telegram Daily Update Bot</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header>
+        <div class="mark">✈</div>
+        <div>
+          <h1>Telegram Daily Update Bot</h1>
+          <p>Morning plan + end-of-day updates, on schedule.</p>
+        </div>
+      </header>
+
+      <section class="card status">
+        <div>
+          <h2>Bot status</h2>
+          <p id="statusText">Checking connection…</p>
+          <p id="errorText" class="error"></p>
+        </div>
+        <button class="secondary" id="refreshBtn">Refresh status</button>
+      </section>
+
+      <section class="card">
+        <h2>Today’s tasks</h2>
+        <p class="muted">
+          Edit the three changing task slots. Fixed meetings and timings stay the same.
+        </p>
+
+        <label for="task1">9:30–10:00 AM task</label>
+        <input id="task1" placeholder="Review checklist and execute tasks" />
+
+        <label for="task2">10:30 AM–1:00 PM task</label>
+        <input id="task2" placeholder="Prepare AI video scene prompts" />
+
+        <label for="task3">2:00–4:00 PM task</label>
+        <input id="task3" placeholder="Edit video and finalize output" />
+
+        <label for="completed">Completed / progress (EOD)</label>
+        <textarea id="completed" rows="3" placeholder="What did you complete today?"></textarea>
+
+        <label for="tomorrow">Tomorrow’s plan (EOD)</label>
+        <textarea id="tomorrow" rows="3" placeholder="What will you work on tomorrow?"></textarea>
+
+        <div class="actions">
+          <button id="saveBtn">Save today’s tasks</button>
+          <span id="saveStatus" class="muted"></span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Send a test update</h2>
+        <p class="muted">Test the messages in your configured Telegram group.</p>
+        <div class="actions">
+          <button id="morningBtn">Send Morning Update</button>
+          <button id="eodBtn" class="secondary">Send EOD Update</button>
+        </div>
+        <p id="sendStatus" class="muted"></p>
+      </section>
+
+      <footer>Schedule: 8:00 AM and 5:00 PM · Asia/Kolkata</footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
