@@ -30,6 +30,7 @@ async function refreshStatus() {
 
 async function loadTasks() {
   const d = await api('/api/tasks');
+  $('task0').value = d.tasks?.task0 || '';
   $('task1').value = d.tasks?.task1 || '';
   $('task2').value = d.tasks?.task2 || '';
   $('task3').value = d.tasks?.task3 || '';
@@ -44,6 +45,7 @@ $('saveBtn').onclick = async () => {
       method: 'POST',
       body: JSON.stringify({
         tasks: {
+          task0: $('task0').value.trim(),
           task1: $('task1').value.trim(),
           task2: $('task2').value.trim(),
           task3: $('task3').value.trim(),

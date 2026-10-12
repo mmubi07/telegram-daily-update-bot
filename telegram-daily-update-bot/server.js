@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const defaults = {
   tasks: {
+    task0: 'CAMERA Setup',
     task1: 'Work on assigned tasks',
     task2: 'Continue project development',
     task3: 'Prepare content and complete pending work',
@@ -27,7 +28,15 @@ const defaults = {
 let data = defaults;
 try {
   if (fs.existsSync(DATA_FILE)) {
-    data = { ...defaults, ...JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')) };
+    const parsed = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    data = {
+      ...defaults,
+      ...parsed,
+      tasks: {
+        ...defaults.tasks,
+        ...(parsed.tasks || {}),
+      },
+    };
   }
 } catch (e) {
   console.error(e.message);
@@ -85,11 +94,11 @@ function dateLabel() {
 
 function morning() {
   const t = data.tasks;
-  return `🌅 GOOD MORNING — DAILY PLAN\n📅 ${dateLabel()}\n\n🕗 8:00–9:00 AM — CAMERA Setup\n🕘 9:00–9:30 AM — SecondShift AI Solutions Meeting\n🕤 9:30–10:00 AM — ${t.task1}\n🕙 10:00–10:30 AM — KTS Team Meeting\n🕥 10:30 AM–1:00 PM — ${t.task2}\n🍱 1:00–2:00 PM — Lunch Break\n🕑 2:00–4:00 PM — ${t.task3}\n🕓 4:00–5:00 PM — Daily Updates & Tomorrow’s Planning\n\nLet’s have a productive day! 💪`;
+  return `🌅 GOOD MORNING — DAILY PLAN\n📅 ${dateLabel()}\n\n🕗 8:00–9:00 AM — ${t.task0 || 'CAMERA Setup'}\n🕘 9:00–9:30 AM — SecondShift AI Solutions Meeting\n🕤 9:30–10:00 AM — ${t.task1}\n🕙 10:00–10:30 AM — KTS Team Meeting\n🕥 10:30 AM–1:00 PM — ${t.task2}\n🍱 1:00–2:00 PM — Lunch Break\n🕑 2:00–4:00 PM — ${t.task3}\n🕓 4:00–5:00 PM — Daily Updates & Tomorrow’s Planning\n\nLet’s have a productive day! 💪`;
 }
 
 function eod() {
-  return `🌙 END-OF-DAY UPDATE\n📅 ${dateLabel()}\n\n✅ TODAY’S WORK\n• 8:00–9:00 AM — CAMERA Setup\n• 9:00–9:30 AM — SecondShift AI Solutions Meeting\n• 9:30–10:00 AM — ${data.tasks.task1}\n• 10:00–10:30 AM — KTS Team Meeting\n• 10:30 AM–1:00 PM — ${data.tasks.task2}\n• 1:00–2:00 PM — Lunch Break\n• 2:00–4:00 PM — ${data.tasks.task3}\n• 4:00–5:00 PM — Daily Updates & Tomorrow’s Planning\n\n📌 COMPLETED / PROGRESS\n${data.completed || 'Progress updated.'}\n\n➡️ TOMORROW’S PLAN\n${data.tomorrow || 'Continue pending tasks.'}\n\nHave a great evening!`;
+  return `🌙 END-OF-DAY UPDATE\n📅 ${dateLabel()}\n\n✅ TODAY’S WORK\n• 8:00–9:00 AM — ${data.tasks.task0 || 'CAMERA Setup'}\n• 9:00–9:30 AM — SecondShift AI Solutions Meeting\n• 9:30–10:00 AM — ${data.tasks.task1}\n• 10:00–10:30 AM — KTS Team Meeting\n• 10:30 AM–1:00 PM — ${data.tasks.task2}\n• 1:00–2:00 PM — Lunch Break\n• 2:00–4:00 PM — ${data.tasks.task3}\n• 4:00–5:00 PM — Daily Updates & Tomorrow’s Planning\n\n📌 COMPLETED / PROGRESS\n${data.completed || 'Progress updated.'}\n\n➡️ TOMORROW’S PLAN\n${data.tomorrow || 'Continue pending tasks.'}\n\nHave a great evening!`;
 }
 
 async function send(kind) {

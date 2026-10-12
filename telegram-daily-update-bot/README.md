@@ -1,6 +1,6 @@
 # Telegram Daily Update Bot
 
-Sends a Morning Plan daily at 8:00 AM and an EOD Update at 5:00 PM (Asia/Kolkata). Includes a local dashboard to edit the three changing tasks and EOD progress.
+Sends a Morning Plan daily at 8:00 AM and an EOD Update at 5:00 PM (Asia/Kolkata). Includes a local dashboard to edit the changing tasks (including 8:00–9:00 AM) and EOD progress.
 
 ## Setup
 1. In Telegram, open **@BotFather**, send `/newbot`, follow the prompts, and copy the bot token.
