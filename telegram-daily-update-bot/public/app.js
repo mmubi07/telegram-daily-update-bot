@@ -13,20 +13,36 @@ async function api(url, options = {}) {
 async function refreshStatus() {
   try {
     const s = await api('/api/status');
-    $('statusText').textContent = `${
-      s.botReady
-        ? 'Connected to Telegram'
-        : s.botConfigured
-        ? 'Connecting to Telegram…'
-        : 'Bot token not configured'
-    } · ${
-      s.chatConfigured ? 'Group ID configured' : 'Group ID missing'
-    } · Timezone: ${s.timezone}`;
-    $('errorText').textContent = s.lastError || '';
+    let chatLabel = 'Group ID missing';
+    if (s.chatConfigured) {
+      if (s.isGroup) {
+        chatLabel = `Group: ${s.chatTitle ? `"${s.chatTitle}"` : s.chatId} ✓`;
+      } else if (s.chatType === 'private') {
+        chatLabel = `⚠️ Private Chat (${s.chatTitle ? `@${s.chatTitle}` : s.chatId}) — Not a group!`;
+      } else {
+        chatLabel = `Target: ${s.chatId}`;
+      }
+    }
+
+    const botLabel = s.botReady
+      ? `Connected as @${s.botUsername || 'bot'}`
+      : s.botConfigured
+      ? 'Connecting to Telegram…'
+      : 'Bot token not configured';
+
+    $('statusText').textContent = `${botLabel} · ${chatLabel} · Timezone: ${s.timezone}`;
+
+    if (s.chatConfigured && !s.isGroup && s.chatType === 'private') {
+      $('errorText').textContent =
+        'Notice: Target is currently a PRIVATE user chat. Telegram group IDs are negative numbers (e.g. -100xxxxxxxxxx). Updates will go to your DM instead of the group until you set the group ID in .env.';
+    } else {
+      $('errorText').textContent = s.lastError || '';
+    }
   } catch (e) {
     $('statusText').textContent = e.message;
   }
 }
+
 
 async function loadTasks() {
   const d = await api('/api/tasks');
