@@ -174,21 +174,34 @@ function handleBotMessage(msg) {
 // Bot initialisation — webhook on Vercel, polling locally
 // ---------------------------------------------------------------------------
 if (token && !token.includes('PASTE_')) {
-  if (IS_VERCEL && WEBHOOK_URL) {
-    // Webhook mode for Vercel
-    bot = new TelegramBot(token, { webHook: false });
+  if (IS_VERCEL) {
+    // Vercel: always use no-polling mode to avoid serverless crashes
+    // Bot is used only for sending messages (via API calls), not receiving
+    bot = new TelegramBot(token, { polling: false });
 
-    const webhookEndpoint = `${WEBHOOK_URL}/webhook/${token}`;
-    bot.setWebHook(webhookEndpoint)
-      .then(() => console.log(`[Telegram] Webhook set to ${webhookEndpoint}`))
-      .catch((e) => console.error('[Telegram] Failed to set webhook:', e.message));
+    if (WEBHOOK_URL) {
+      // Register webhook so Telegram pushes updates to our endpoint
+      const webhookEndpoint = `${WEBHOOK_URL}/webhook/${token}`;
+      bot.setWebHook(webhookEndpoint)
+        .then(() => console.log(`[Telegram] Webhook set to ${webhookEndpoint}`))
+        .catch((e) => console.error('[Telegram] Failed to set webhook:', e.message));
+
+      app.post(`/webhook/${token}`, (req, res) => {
+        try { bot.processUpdate(req.body); } catch (_) {}
+        res.sendStatus(200);
+      });
+
+      bot.on('message', handleBotMessage);
+    } else {
+      console.warn('[Telegram] WEBHOOK_URL not set — bot will only send messages, not receive commands.');
+    }
 
     bot.getMe()
       .then(async (me) => {
         botInfo = me;
         botReady = true;
         lastError = '';
-        console.log(`[Telegram] Connected as @${me.username} (webhook mode)`);
+        console.log(`[Telegram] Connected as @${me.username} (Vercel/no-polling mode)`);
         await verifyTargetChat();
       })
       .catch((e) => {
@@ -196,15 +209,8 @@ if (token && !token.includes('PASTE_')) {
         console.error('[Telegram] Failed to connect:', lastError);
       });
 
-    app.post(`/webhook/${token}`, (req, res) => {
-      bot.processUpdate(req.body);
-      res.sendStatus(200);
-    });
-
-    bot.on('message', handleBotMessage);
-
   } else {
-    // Polling mode for local dev
+    // Local dev: polling mode
     bot = new TelegramBot(token, {
       polling: { interval: 1000, autoStart: true, params: { timeout: 10 } },
     });
